@@ -3,13 +3,17 @@ import argparse
 import pandas as pd
 from connect import get_connection
 
-
-
 #Getting the Data
 
 def batch_records():
     """This function takes in the link to the unique download path
-    of the parquet file, and batches the record to postgres"""
+    of the parquet file, and batches the record to postgres
+    
+    There are three arguments that most be passed:
+    --url
+    --filetype
+    --tablename 
+    """
 
     parser = argparse.ArgumentParser()
 
@@ -29,14 +33,15 @@ def batch_records():
     if file_type == 'parquet':
         os.system(f"wget {url} -O dataset.parquet")
         df = pd.read_parquet('dataset.parquet')
-        df.tpep_pickup_datetime = pd.to_datetime(df.tpep_pickup_datetime)
-        df.tpep_dropoff_datetime = pd.to_datetime(df.tpep_dropoff_datetime)
+        df.lpep_pickup_datetime = pd.to_datetime(df.lpep_pickup_datetime)
+        df.lpep_dropoff_datetime = pd.to_datetime(df.lpep_dropoff_datetime)
 
     else:
-        os.system(f"wget {url}-O dataset.csv")
-        df = pd.read_csv('dataset.csv')
+        os.system(f"wget {url} -O dataset.{file_type}")
+        df = pd.read_csv(f"dataset.{file_type}")
 
     print(df.head(10))
+    print(len(df))
     #Batching the records to postgress
     
     #This is used to make a connection to the postgress DB
@@ -46,9 +51,11 @@ def batch_records():
 
     print('Batch Successful')
 
+    engine.connect().close()
+
 if __name__ == '__main__':
     batch_records()
-    engine.connect().close()
+    
 
     
 
