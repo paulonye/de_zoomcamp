@@ -1,0 +1,90 @@
+3) How many taxi trips were totally made on January 15?
+
+WITH date_table AS(
+	SELECT lpep_pickup_datetime::date AS date
+	FROM test_table5)
+	
+	SELECT COUNT(*)
+	FROM date_table
+	where date = '2019-01-15'
+Ans= 20689
+--------------------------------------------------
+4) Which was the day with the largest trip distance Use the pick up time for your calculations.
+
+WITH date_table AS (
+	SELECT lpep_pickup_datetime::date as date,
+			trip_distance as distance
+	FROM test_table5)
+	
+	Select date, Max(distance) as DIST
+	FROM date_table
+	GROUP BY date
+	ORDER by DIST desc
+Ans= 2019-01-15	
+-------------------------------------------------------------------
+5) In 2019-01-01 how many trips had 2 and 3 passengers?
+
+WITH date_table AS (
+	SELECT lpep_pickup_datetime::date as date,
+			trip_distance as distance,
+			passenger_count as no_passenger
+	FROM test_table5)
+	
+	Select no_passenger, count(no_passenger)
+	FROM date_table
+	WHERE date = '2019-01-01'
+	AND no_passenger IN (2,3)
+	GROUP BY no_passenger
+Ans= 2:1282, 3:254	
+
+---------------------------------------------------
+6 )
+WITH Zone_Pickup AS (
+	SELECT ZT."LocationID" as zoneid
+--			TT."tip_amount" as tip,
+--			ZT."Zone" as zonepickup
+	FROM test_table5 AS TT
+	JOIN zone_table AS ZT 
+	ON TT."PULocationID" = ZT."LocationID"
+	WHERE ZT."Zone" = 'Astoria'
+	),
+	Zone_Dropof AS (
+	SELECT ZT."LocationID" as zoneid,
+			TT."tip_amount" as tip,
+			ZT."Zone" as zonedropof
+	FROM test_table5 AS TT
+	JOIN zone_table AS ZT 
+	ON TT."DOLocationID" = ZT."LocationID"
+	)
+	SELECT Zone_Dropof."zonedropof", SUM(Zone_Dropof."tip") AS tip_amount
+	FROM Zone_Dropof
+	LEFT JOIN Zone_Pickup
+	ON Zone_Pickup."zoneid" = Zone_Dropof."zoneid"
+	GROUP BY Zone_Dropof."zonedropof"
+	ORDER BY tip_amount
+	
+-------------------------
+SELECT ZT."LocationID" as zoneid
+--		TT."tip_amount" as tip,
+--		ZT."Zone" as zonepickup
+FROM test_table5 AS TT
+JOIN zone_table AS ZT 
+ON TT."PULocationID" = ZT."LocationID"
+WHERE ZT."Zone" = 'Astoria'
+	),
+
+SELECT 
+	ZT."Zone" as zonedropof,
+--	ZT."LocationID" as zoneid,
+--	TT."PULocationID" as zonepuid,
+	MAX(TT."tip_amount") AS tip_count
+	
+FROM test_table5 AS TT
+	INNER JOIN zone_table AS ZT 
+	ON TT."DOLocationID" = ZT."LocationID"
+	WHERE TT."PULocationID" = 7
+	GROUP BY zonedropof
+	ORDER BY tip_count DESC
+Ans= Long Island City/Queens Plaza
+	
+	
