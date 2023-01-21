@@ -6,7 +6,6 @@ services:
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=ny_taxi
     volumes:
-
       - "./data/ny_taxi_2020:/var/lib/postgresql/data:rw"
     ports:
       - "5432:5432"
@@ -18,3 +17,7 @@ services:
       - PGADMIN_COOKIE_SECRET=53tegevd66efdvfff
     ports:
       - "8080:80"
+  # runjob:
+  #   build:
+  #     context: .
+  #     dockerfile: ./Dockerfile

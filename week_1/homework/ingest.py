@@ -33,8 +33,8 @@ def batch_records():
     if file_type == 'parquet':
         os.system(f"wget {url} -O dataset.parquet")
         df = pd.read_parquet('dataset.parquet')
-        df.lpep_pickup_datetime = pd.to_datetime(df.lpep_pickup_datetime)
-        df.lpep_dropoff_datetime = pd.to_datetime(df.lpep_dropoff_datetime)
+        df.tpep_pickup_datetime = pd.to_datetime(df.tpep_pickup_datetime)
+        df.tpep_dropoff_datetime = pd.to_datetime(df.tpep_dropoff_datetime)
 
     else:
         os.system(f"wget {url} -O dataset.{file_type}")
