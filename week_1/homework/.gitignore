@@ -2,3 +2,4 @@ dataset.csv
 dataset.csv.gz
 dataset.parquet
 __pycache__/
+data/
