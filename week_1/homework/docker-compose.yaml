@@ -16,7 +16,7 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=root
       - PGADMIN_COOKIE_SECRET=53tegevd66efdvfff
     ports:
-      - "8080:80"
+      - "8081:80"
   # runjob:
   #   build:
   #     context: .
