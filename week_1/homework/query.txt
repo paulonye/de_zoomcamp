@@ -38,31 +38,7 @@ WITH date_table AS (
 Ans= 2:1282, 3:254	
 
 ---------------------------------------------------
-6 )
-WITH Zone_Pickup AS (
-	SELECT ZT."LocationID" as zoneid
---			TT."tip_amount" as tip,
---			ZT."Zone" as zonepickup
-	FROM test_table5 AS TT
-	JOIN zone_table AS ZT 
-	ON TT."PULocationID" = ZT."LocationID"
-	WHERE ZT."Zone" = 'Astoria'
-	),
-	Zone_Dropof AS (
-	SELECT ZT."LocationID" as zoneid,
-			TT."tip_amount" as tip,
-			ZT."Zone" as zonedropof
-	FROM test_table5 AS TT
-	JOIN zone_table AS ZT 
-	ON TT."DOLocationID" = ZT."LocationID"
-	)
-	SELECT Zone_Dropof."zonedropof", SUM(Zone_Dropof."tip") AS tip_amount
-	FROM Zone_Dropof
-	LEFT JOIN Zone_Pickup
-	ON Zone_Pickup."zoneid" = Zone_Dropof."zoneid"
-	GROUP BY Zone_Dropof."zonedropof"
-	ORDER BY tip_amount
-	
+6 )	
 -------------------------
 SELECT ZT."LocationID" as zoneid
 --		TT."tip_amount" as tip,
