@@ -1,55 +1,51 @@
 import os
-
 from datetime import datetime
+import pandas as pd
 
 from airflow import DAG
 
 from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
 
-from ingest_script import ingest_callable
+from ingest import download_records, batch_records
 
 
 AIRFLOW_HOME = os.environ.get("AIRFLOW_HOME", "/opt/airflow/")
 
-
-PG_HOST = os.getenv('PG_HOST')
-PG_USER = os.getenv('PG_USER')
-PG_PASSWORD = os.getenv('PG_PASSWORD')
-PG_PORT = os.getenv('PG_PORT')
-PG_DATABASE = os.getenv('PG_DATABASE')
+URL = os.getenv('URL', 'https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2019-01.parquet')
+TYPE = os.getenv('TYPE', 'parquet')
+TABLENAME = os.getenv('TABLENAME', 'airflowtable1')
 
 
 local_workflow = DAG(
     "LocalIngestionDag",
-    schedule_interval="0 6 2 * *",
-    start_date=datetime(2021, 1, 1)
+    schedule_interval="@daily",
+    start_date=datetime(2023, 1, 23)
 )
 
-
-URL_PREFIX = 'https://s3.amazonaws.com/nyc-tlc/trip+data' 
-URL_TEMPLATE = URL_PREFIX + '/yellow_tripdata_{{ execution_date.strftime(\'%Y-%m\') }}.csv'
-OUTPUT_FILE_TEMPLATE = AIRFLOW_HOME + '/output_{{ execution_date.strftime(\'%Y-%m\') }}.csv'
-TABLE_NAME_TEMPLATE = 'yellow_taxi_{{ execution_date.strftime(\'%Y_%m\') }}'
+if TYPE == 'parquet':
+    dataset = 'dataset.parquet'
+else:
+    dataset = 'dataset.csv'
 
 with local_workflow:
-    wget_task = BashOperator(
-        task_id='wget',
-        bash_command=f'curl -sSL {URL_TEMPLATE} > {OUTPUT_FILE_TEMPLATE}'
+    download_task = PythonOperator(
+        task_id='download',
+        python_callable=download_records,
+        op_kwargs=dict(
+            url=URL,
+            file_type=TYPE
+        )
     )
 
-    ingest_task = PythonOperator(
-        task_id="ingest",
-        python_callable=ingest_callable,
+    batch_task = PythonOperator(
+        task_id="bacth",
+        python_callable=batch_records,
         op_kwargs=dict(
-            user=PG_USER,
-            password=PG_PASSWORD,
-            host=PG_HOST,
-            port=PG_PORT,
-            db=PG_DATABASE,
-            table_name=TABLE_NAME_TEMPLATE,
-            csv_file=OUTPUT_FILE_TEMPLATE
+            file_type=TYPE,
+            tablename=TABLENAME,
+            dataset=dataset
         ),
     )
 
-    wget_task >> ingest_task
+    download_task >> batch_task
