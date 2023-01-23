@@ -1,9 +1,9 @@
 locals {
-  data_lake_bucket = "dtc_data_lake"
+  data_lake_bucket = "homework_data_lake"
 }
 
 variable "project" {
-  description = "your_project_id"
+  description = "gcpprojects-372909"
 }
 
 variable "region" {
@@ -20,5 +20,5 @@ variable "storage_class" {
 variable "BQ_DATASET" {
   description = "BigQuery Dataset that raw data (from GCS) will be written to"
   type        = string
-  default     = "trips_data_all"
+  default     = "homeworkdataset"
 }
