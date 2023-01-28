@@ -66,7 +66,7 @@ x-airflow-common:
     GCP_GCS_BUCKET: 'dtc_data_lake_gcpprojects-372909'
 
   volumes:
-    - ./dags:/opt/airflow/dags
+    - ./dags_local:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
     - ~/.google/credentials/:/.google/credentials:ro
@@ -109,7 +109,7 @@ services:
     <<: *airflow-common
     command: webserver
     ports:
-      - 8080:8080
+      - 8082:8080
     healthcheck:
       test:
         [
@@ -278,7 +278,7 @@ services:
     <<: *airflow-common
     command: celery flower
     ports:
-      - 5555:5555
+      - 5556:5555
     healthcheck:
       test: [ "CMD", "curl", "--fail", "http://localhost:5555/" ]
       interval: 10s
