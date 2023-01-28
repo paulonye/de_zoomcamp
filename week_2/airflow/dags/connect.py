@@ -4,7 +4,7 @@ import os
 user = os.environ.get('PGUSER', 'main')
 password = os.environ.get('PGPASS', 'root')
 port = 5432
-host = os.environ.get('HOST', '********')
+host = os.environ.get('HOST', '*********')
 db = os.environ.get('DB', 'ny_taxi')
 
 def get_connection():
