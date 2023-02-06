@@ -1,13 +1,15 @@
 from sqlalchemy import create_engine
 import os
-
-user = os.environ.get('PGUSER', 'main')
-password = os.environ.get('PGPASS', 'root')
-port = 5432
-host = os.environ.get('HOST', '10.128.0.2')
-db = os.environ.get('DB', 'ny_taxi')
+from dotenv import load_dotenv
+load_dotenv()
 
 def get_connection():
+
+    user = os.environ.get('PGUSER')
+    password = os.environ.get('PGPASS')
+    port = 5432
+    host = os.environ.get('HOST')
+    db = os.environ.get('DB')
 
     postgres_url = f'postgresql://{user}:{password}@{host}:{port}/{db}'
 
