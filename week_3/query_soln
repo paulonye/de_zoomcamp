@@ -1,0 +1,17 @@
+No 3 
+SELECT COUNT(*) 
+FROM `sendme-test-db.homework.fhv_tripdata`
+WHERE PUlocationID IS NULL and DOlocationID IS NULL
+
+
+N0 5ß
+SELECT DISTINCT COUNT(Affiliated_base_number)
+FROM `sendme-test-db.homework.fhv_tripdata`
+WHERE DATE(pickup_datetime) BETWEEN '2019-03-01' AND '2019-03-31'
+
+
+SELECT DISTINCT COUNT(Affiliated_base_number)
+FROM `sendme-test-db.homework.fhv_tripdata_part_clus`
+WHERE DATE(pickup_datetime) BETWEEN '2019-03-01' AND '2019-03-31'
+
+
