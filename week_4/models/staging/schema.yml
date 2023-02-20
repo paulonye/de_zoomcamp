@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: staging
+    database: sendme-test-db
+    schema: nytaxi
+
+    tables:
+      - name: green_2021
+      - name: yellow_2021
