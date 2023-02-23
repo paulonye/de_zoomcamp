@@ -3,11 +3,12 @@ version: 2
 sources:
   - name: staging
     database: sendme-test-db
-    schema: nytaxi
+    schema: homework4_staging
 
     tables:
-      - name: green_2021
-      - name: yellow_2021
+      - name: green_tripdata
+      - name: yellow_tripdata
+      - name: fhv_2019
 
 models:
     - name: green_tripdata
