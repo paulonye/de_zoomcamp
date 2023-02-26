@@ -28,11 +28,11 @@ def transform(path: Path) -> pd.DataFrame:
 def write_bq(df: pd.DataFrame) -> None:
     """Write DataFrame to BiqQuery"""
 
-    gcp_credentials_block = GcpCredentials.load("zoom-gcp-creds")
+    gcp_credentials_block = GcpCredentials.load("zoom")
 
     df.to_gbq(
         destination_table="dezoomcamp.rides",
-        project_id="gcpprojects-372909",
+        project_id="sendme-test-db",
         credentials=gcp_credentials_block.get_credentials_from_service_account(),
         chunksize=500_000,
         if_exists="append",
