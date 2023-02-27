@@ -1,7 +1,9 @@
 FROM prefecthq/prefect:2.7.7-python3.9
 
-COPY docker-requirements.txt .
+COPY requirements.txt .
 
-RUN pip install -r docker-requirements.txt --trusted-host pypi.python.org --no-cache-dir
+RUN pip install -r requirements.txt
 
-COPY par_web_gcs.py /opt/prefect/flows/
+COPY etl_gcs_bq.py /opt/prefect/flows/
+
+WORKDIR /opt/prefect/flows/
