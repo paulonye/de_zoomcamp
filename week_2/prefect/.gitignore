@@ -3,3 +3,4 @@ env/
 .prefectignore
 data/
 prefect/
+conf.sh

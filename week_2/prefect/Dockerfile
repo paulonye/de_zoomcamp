@@ -6,4 +6,7 @@ RUN pip install -r requirements.txt
 
 COPY etl_gcs_bq.py /opt/prefect/flows/
 
+COPY conf.sh /opt/prefect/flows/
+
 WORKDIR /opt/prefect/flows/
+
