@@ -1,22 +1,30 @@
+import time
 import pyspark
 from pyspark.sql import SparkSession
-import os
+
 
 def test_spark():
     """This creates a temporary spark session, and kills it once the process exists"""
     spark = SparkSession.builder \
-        .master("local[*]") \
         .appName('test') \
         .getOrCreate()
 
     df = spark.read \
         .option("header", "true") \
-        .csv('taxi+_zone_lookup.csv')
+        .parquet('gs://de-zoomcamp-paul/nyc_data.parquet') 
+        #.repartition(4)
 
-    df.show()
+    #df = df.repartition(24)
 
-   # df.write.parquet('zones')
+    print(df.count())
+    print(df.groupby('PULocationID').count().show())
+
+    df.write.parquet('gs://de-zoomcamp-paul/results/', mode='overwrite')
 
 if __name__ == '__main__':
-    os.system("wget https://github.com/DataTalksClub/nyc-tlc-data/releases/download/fhvhv/fhvhv_tripdata_2021-01.csv.gz -O fhvhv_tripdata_2021-01.csv ")
+    start_time = time.time()
     test_spark()
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+
+    print(f"Elapsed time: {elapsed_time:.2f} seconds")
